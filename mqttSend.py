@@ -1,6 +1,7 @@
 import paho.mqtt.client as mqtt
 import requests
 import json
+import threading
 
 # Variables
 address = "192.168.1.98:8080"
@@ -86,16 +87,23 @@ def on_message(client, userdata, msg):
     client.disconnect()
 
 
-# Initiate MQTT Client
-mqttc = mqtt.Client()
+def run_script():
+    # Send MQTT message every 30 sec
+    threading.Timer(30.0, run_script).start()
 
-# Register publish callback function
-mqttc.on_publish = on_publish
-mqttc.on_connect = on_connect
-mqttc.on_message = on_message
+    # Initiate MQTT Client
+    mqttc = mqtt.Client()
 
-# Connect with MQTT Broker
-mqttc.connect(MQTT_HOST, MQTT_PORT, MQTT_KEEPALIVE_INTERVAL)
+    # Register publish callback function
+    mqttc.on_publish = on_publish
+    mqttc.on_connect = on_connect
+    mqttc.on_message = on_message
 
-# Loop forever
-mqttc.loop_forever()
+    # Connect with MQTT Broker
+    mqttc.connect(MQTT_HOST, MQTT_PORT, MQTT_KEEPALIVE_INTERVAL)
+
+    # Loop forever
+    mqttc.loop_forever()
+
+
+run_script()
