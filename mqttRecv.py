@@ -20,9 +20,7 @@ def on_message(client, userdata, msg):
 
 def handle_message(msg):
     if msg.topic in "Temperature":
-        print(repr(msg.payload))
         command = find_numbers(repr(msg.payload))
-        print(command[0])
 
         # Temperature rest url
         temperature_url = "http://" + address + "/rest/items/zwave_device_e0a89d4c_node2_thermostat_setpoint_heating"
